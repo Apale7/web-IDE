@@ -36,7 +36,7 @@ function CommunityEdition() {
       <LanguageSelect setLanguage={setLanguage} setCode={setCode} value={String(language)}/>
       <Monaco language={languages[language]} setCode={setCode} code={code}/>
       <Row style={{height: String(size.innerHeight * 0.1)}} id="bottom_row">
-        <Col offset={0} span={4}>
+        <Col offset={0} span={24}>
           <MyTabs
             input={input}
             output={output}
