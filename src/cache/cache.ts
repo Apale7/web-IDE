@@ -15,7 +15,7 @@ function storeLanguage(language: number) {
 
 function getLanguage(): number {
   const l = get('language')
-  if (l=='' || isNaN(Number(l)))
+  if (l === '' || isNaN(Number(l)))
     return 0;
   return Number(l);
 }

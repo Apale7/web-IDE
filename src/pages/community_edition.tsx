@@ -1,10 +1,11 @@
+import './community_edition.css'
 import React, {useState} from "react";
 import Monaco from "../components/editor/monaco";
 import useWindowSize from "../hooks/windowSize";
 import {Button, Col, Input, Row, Tabs} from "antd";
 import axios from "axios";
 import LanguageSelect from "../components/language_select/language_select";
-import {getCode, getLanguage, storeCode, storeLanguage} from '../cache/cache'
+import {getCode, getLanguage} from '../cache/cache'
 
 const {TabPane} = Tabs;
 const languages = ["cpp", "java"];
@@ -34,8 +35,8 @@ function CommunityEdition() {
     <div className="App">
       <LanguageSelect setLanguage={setLanguage} setCode={setCode} value={String(language)}/>
       <Monaco language={languages[language]} setCode={setCode} code={code}/>
-      <Row style={{height: String(size.innerHeight * 0.35)}}>
-        <Col span="22">
+      <Row style={{height: String(size.innerHeight * 0.1)}} id="bottom_row">
+        <Col offset={0} span={4}>
           <MyTabs
             input={input}
             output={output}
@@ -45,11 +46,8 @@ function CommunityEdition() {
             setTabKey={setTabKey}
           />
         </Col>
-        <Col span="2">
-          <Button onClick={onClick} size={'large'}>运行</Button>
-        </Col>
+        <Button onClick={onClick} id="run">运行</Button>
       </Row>
-
       {/* <MyTerminal container_id="test"></MyTerminal> */}
     </div>
   );
