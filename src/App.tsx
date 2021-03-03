@@ -1,19 +1,23 @@
-import { useState } from "react";
 import "./App.css";
-import CommunityEdition from "./pages/community_edition";
-import ProfessionalEdition from "./pages/professional_edition";
 import { AuthProvider } from "react-auth-kit";
-
+import RouteComponent from "./routes";
 function App() {
-
-  let mainPage;
-  if (isLogin) {
-    mainPage = <ProfessionalEdition></ProfessionalEdition>;
-  } else {
-    mainPage = <CommunityEdition></CommunityEdition>;
-  }
-
-  return <div className="App">{mainPage}</div>;
+  return (
+    <div className="App">
+      <AuthProvider
+        authStorageType={"localstorage"}
+        authStorageName={"_auth_t"}
+        authTimeStorageName={"_auth_time"}
+        stateStorageName={"_auth_state"}
+        // cookieDomain={window.location.hostname}
+        // cookieSecure={window.location.protocol === "https:"}
+        refreshTokenName={"_refresh_t"}
+      >
+        <RouteComponent />
+      </AuthProvider>
+      ;
+    </div>
+  );
 }
 
 export default App;
