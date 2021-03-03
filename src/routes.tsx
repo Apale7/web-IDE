@@ -10,7 +10,7 @@ export default function RouterComponent() {
     <BrowserRouter>
       <Route path="/community" component={CommunityEdition} />
       <Route path="/login" component={Login} />
-      <PrivateRoute path="/professional" component={ProfessionalEdition} loginPath={'/login'}/>
+      <PrivateRoute path="/" component={ProfessionalEdition} loginPath={'/login'} exact/>
     </BrowserRouter>
   );
 }
