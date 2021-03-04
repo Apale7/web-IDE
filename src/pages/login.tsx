@@ -1,12 +1,9 @@
 import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./login.css";
-import axios from "axios";
-import { useSignIn } from "react-auth-kit";
-
+import axios from "../axios/axiosSetting";
+import { getTokens, setTokens } from "../cache/cache";
 const Login = () => {
-  const signIn = useSignIn();
-
   const onFinish = (values: any) => {
     console.log("Received values of form: ", values);
     axios
@@ -15,20 +12,26 @@ const Login = () => {
         password: values.password,
       })
       .then((res) => {
-        if (
-          signIn({
-            token: res.data.data.access_token,
-            expiresIn: 1,
-            tokenType: "Bearer",
-            authState: {},
-            refreshToken: res.data.data.refresh_token, // Only if you are using refreshToken feature
-            refreshTokenExpireIn: 60*24*7,
-          })
-        ) {
-          console.log("login success", res);
-        } else {
-          console.log("login failed", res);
+        if (res.data.status_code !== 0) {
+          console.log("用户名或密码错误");
+          return;
         }
+        console.log(res);
+
+        setTokens(
+          res.data.data.access_token,
+          res.data.data.access_exp,
+          res.data.data.refresh_token,
+          res.data.data.refresh_exp
+        );
+
+        console.log(
+          `exp after ${
+            (res.data.data.access_exp -
+              Date.parse(new Date().toString()) / 1000) /
+            60
+          } minutes`
+        );
       });
   };
 
