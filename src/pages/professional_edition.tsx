@@ -6,7 +6,19 @@ import { getCode, getLanguage } from "../cache/cache";
 import MyTerminal from "../components/terminal/terminal";
 
 import { useHistory } from "react-router-dom";
+import DirTree from "../components/dir_tree/dir_tree";
 const languages = ["cpp", "java"];
+
+const dirTreeStyle = [
+  {
+    backgroundColor: "#252526",
+    color: "#cccccc",
+  },
+  {
+    backgroundColor: "#ffffff",
+    color: "#000000",
+  },
+];
 
 function ProfessionalEdition() {
   const history = useHistory();
@@ -24,12 +36,32 @@ function ProfessionalEdition() {
         setCode={setCode}
         value={String(language)}
       />
-      <Monaco language={languages[language]} setCode={setCode} code={code} />
-      <div style={{ height: "200px" }}>
-        <MyTerminal
-          container_id="container2"
-          host="193.112.177.167:8000"
-        ></MyTerminal>
+      <div style={{ display: "flex" }}>
+        <div
+          style={{
+            width: "200px",
+            backgroundColor: dirTreeStyle[0].backgroundColor,
+            height: '95vh'
+          }}
+        >
+          <DirTree style={dirTreeStyle[0]}></DirTree>
+        </div>
+        <div style={{ width: "100%" }}>
+          <div style={{ paddingRight: "10px" }}>
+            <Monaco
+              language={languages[language]}
+              setCode={setCode}
+              code={code}
+            />
+          </div>
+
+          <div style={{ height: "200px" }}>
+            <MyTerminal
+              container_id="container2"
+              host="193.112.177.167:8000"
+            ></MyTerminal>
+          </div>
+        </div>
       </div>
     </div>
   );

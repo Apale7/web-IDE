@@ -18,7 +18,6 @@ export default function Monaco(props: any) {
   return (
     <div>
       <MonacoEditor
-        width={size.innerWidth}
         height={size.innerHeight * 0.65}
         language={props.language}
         theme="vs-dark"
