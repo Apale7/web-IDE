@@ -7,7 +7,7 @@ import Test from "./pages/file";
 export default function RouterComponent() {
   return (
     <BrowserRouter>
-      <Route path="/community" component={CommunityEdition} />
+      <Route path="/comm" component={CommunityEdition} />
       <Route path="/login" component={Login} exact />
       <Route path="/prof" component={ProfessionalEdition} />
       <Route path="/file" component={Test} />

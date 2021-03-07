@@ -12,6 +12,11 @@ const Login = () => {
         password: values.password,
       })
       .then((res) => {
+        if (!res) {
+          console.log("服务器错误");
+          return;
+        }
+        
         if (res.data.status_code !== 0) {
           console.log("用户名或密码错误");
           return;
