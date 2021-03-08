@@ -44,7 +44,7 @@ function ProfessionalEdition() {
             height: "95vh",
           }}
         >
-          <DirTree style={dirTreeStyle[0]}></DirTree>
+          <DirTree style={dirTreeStyle[0]} setCode={setCode} />
         </div>
         <div style={{ width: "100%" }}>
           <div style={{ paddingRight: "10px" }}>

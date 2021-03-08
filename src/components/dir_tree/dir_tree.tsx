@@ -12,9 +12,7 @@ interface DataNode {
   children?: DataNode[];
 }
 
-const initTreeDate: DataNode[] = [
-  { title: "root", key: "root" },
-];
+const initTreeDate: DataNode[] = [{ title: "/", key: "/" }];
 
 // It's just a simple demo. You can use tree map to optimize update perf.
 function updateTreeData(
@@ -52,17 +50,28 @@ function getDirectory(containerID: string, path: string) {
   });
 }
 
+function getFile(containerID: string, path: string) {
+  return axios.get("/api/file/file", {
+    params: {
+      container_id: containerID,
+      path: path,
+    },
+  });
+}
+
 const DirTree = (props: any) => {
   const [treeData, setTreeData] = useState(initTreeDate);
 
-  function onLoadData({ key, children }: any) {
+  const onLoadData = ({ key, children }: any) => {
+    console.log(key);
+
     return new Promise<void>(async (resolve) => {
       if (children) {
         resolve();
         return;
       }
 
-      await getDirectory("container3", "/root").then((res) => {
+      await getDirectory("container3", key).then((res) => {
         console.log(res);
         setTreeData((origin) =>
           updateTreeData(
@@ -71,7 +80,7 @@ const DirTree = (props: any) => {
             res.data.data.map((fileStat: FileStat) => {
               const tmp: DataNode = {
                 title: fileStat.file_name,
-                key: fileStat.file_name + String(Math.random()),
+                key: key + "/" + fileStat.file_name,
                 isLeaf: fileStat.file_type === 0,
               };
               console.log(tmp);
@@ -83,13 +92,21 @@ const DirTree = (props: any) => {
       });
       resolve();
     });
-  }
+  };
 
+  const onSelect = (selectedKeys: any, info: any) => {
+    getFile("container3", selectedKeys[0]).then((res) => {
+      console.log(res.data.data.files[0].content);
+      props.setCode(res.data.data.files[0].content);
+    });
+  };
   return (
     <DirectoryTree
       loadData={onLoadData}
       treeData={treeData}
       style={props.style}
+      onSelect={onSelect}
+      height={950}
     />
   );
 };
