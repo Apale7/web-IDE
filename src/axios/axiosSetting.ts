@@ -2,10 +2,10 @@
  * 网络请求配置
  */
 import axios from "axios";
+import { AxiosRequestConfig } from "axios";
 import { getTokens, setTokens, getAccessToken } from "../cache/cache";
 
 // axios.defaults.timeout = 10000;
-
 let isRefreshing = false;
 
 const refresh = (refreshToken: string) => {
@@ -52,13 +52,13 @@ const autoRefresh = () => {
  */
 axios.interceptors.request.use(
   (config) => {
-    if (!isRefreshing) autoRefresh();
+    // if (!isRefreshing) autoRefresh();
 
     config.data = JSON.stringify(config.data);
 
     config.headers = {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${getAccessToken()}`,
+      "Content-Type": "multipart/from-data",
+      // Authorization: `Bearer ${getAccessToken()}`,
     };
     return config;
   },
@@ -82,4 +82,14 @@ axios.interceptors.response.use(
   }
 );
 
+const get = (url: string, config: AxiosRequestConfig | undefined) => {
+  if (config)
+    config.headers = {
+      "Content-Type": "multipart/from-data",
+      // Authorization: `Bearer ${getAccessToken()}`,
+    };
+  return axios.get(url, config);
+};
+
 export default axios;
+export { get };

@@ -1,45 +1,97 @@
+import React, { useState } from "react";
 import { Tree } from "antd";
+
+import axios, { get } from "../../axios/axiosSetting";
 
 const { DirectoryTree } = Tree;
 
-const treeData = [
-  {
-    title: "parent 0",
-    key: "0-0",
-    children: [
-      { title: "leaf 0-0", key: "0-0-0", isLeaf: true },
-      { title: "leaf 0-1", key: "0-0-1", isLeaf: true },
-    ],
-  },
-  {
-    title: "parent 1",
-    key: "0-1",
-    children: [
-      { title: "leaf 1-0", key: "0-1-0", isLeaf: true },
-      { title: "leaf 1-1", key: "0-1-1", isLeaf: true },
-    ],
-  },
+interface DataNode {
+  title: string;
+  key: string;
+  isLeaf?: boolean;
+  children?: DataNode[];
+}
+
+const initTreeDate: DataNode[] = [
+  { title: "root", key: "root" },
 ];
 
-const DirTree = (props: any) => {
-  const onSelect = (keys: React.Key[], info: any) => {
-    console.log("Trigger Select", keys, info);
-  };
+// It's just a simple demo. You can use tree map to optimize update perf.
+function updateTreeData(
+  list: DataNode[],
+  key: React.Key,
+  children: DataNode[]
+): DataNode[] {
+  return list.map((node) => {
+    if (node.key === key) {
+      return {
+        ...node,
+        children,
+      };
+    } else if (node.children) {
+      return {
+        ...node,
+        children: updateTreeData(node.children, key, children),
+      };
+    }
+    return node;
+  });
+}
 
-  const onExpand = () => {
-    console.log("Trigger Expand");
-  };
+interface FileStat {
+  file_type: number;
+  file_name: string;
+}
+
+function getDirectory(containerID: string, path: string) {
+  return axios.get("/api/file/dir", {
+    params: {
+      container_id: containerID,
+      path: path,
+    },
+  });
+}
+
+const DirTree = (props: any) => {
+  const [treeData, setTreeData] = useState(initTreeDate);
+
+  function onLoadData({ key, children }: any) {
+    return new Promise<void>(async (resolve) => {
+      if (children) {
+        resolve();
+        return;
+      }
+
+      await getDirectory("container3", "/root").then((res) => {
+        console.log(res);
+        setTreeData((origin) =>
+          updateTreeData(
+            origin,
+            key,
+            res.data.data.map((fileStat: FileStat) => {
+              const tmp: DataNode = {
+                title: fileStat.file_name,
+                key: fileStat.file_name + String(Math.random()),
+                isLeaf: fileStat.file_type === 0,
+              };
+              console.log(tmp);
+
+              return tmp;
+            })
+          )
+        );
+      });
+      resolve();
+    });
+  }
 
   return (
     <DirectoryTree
-      multiple
-      defaultExpandAll
-      onSelect={onSelect}
-      onExpand={onExpand}
+      loadData={onLoadData}
       treeData={treeData}
       style={props.style}
-      height={1000}
     />
   );
 };
+
 export default DirTree;

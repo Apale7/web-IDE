@@ -41,7 +41,7 @@ function ProfessionalEdition() {
           style={{
             width: "200px",
             backgroundColor: dirTreeStyle[0].backgroundColor,
-            height: '95vh'
+            height: "95vh",
           }}
         >
           <DirTree style={dirTreeStyle[0]}></DirTree>
@@ -57,7 +57,7 @@ function ProfessionalEdition() {
 
           <div style={{ height: "200px" }}>
             <MyTerminal
-              container_id="container2"
+              container_id="container3"
               host="193.112.177.167:8000"
             ></MyTerminal>
           </div>
