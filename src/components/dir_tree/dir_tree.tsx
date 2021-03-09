@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Tree } from "antd";
 
 import axios, { get } from "../../axios/axiosSetting";
+import { log } from "console";
 
 const { DirectoryTree } = Tree;
 
@@ -80,10 +81,13 @@ const DirTree = (props: any) => {
             res.data.data.map((fileStat: FileStat) => {
               const tmp: DataNode = {
                 title: fileStat.file_name,
-                key: key + "/" + fileStat.file_name,
+                key:
+                  key +
+                  fileStat.file_name +
+                  (fileStat.file_type === 0 ? "" : "/"),
                 isLeaf: fileStat.file_type === 0,
               };
-              console.log(tmp);
+              // console.log(tmp);
 
               return tmp;
             })
@@ -95,10 +99,21 @@ const DirTree = (props: any) => {
   };
 
   const onSelect = (selectedKeys: any, info: any) => {
+    if (selectedKeys.length <= 0) return;
+    console.log(selectedKeys[0]);
     getFile("container3", selectedKeys[0]).then((res) => {
       console.log(res.data.data.files[0].content);
       props.setCode(res.data.data.files[0].content);
+      props.setSelectedFile(selectedKeys[0]);
     });
+  };
+
+  const onExpand = function (expandedKeys: any, info: any) {
+    if (!expandedKeys || expandedKeys.length === 0) {
+      return;
+    }
+    console.log(info);
+    if (info.expanded) onLoadData({ key: expandedKeys[0] });
   };
   return (
     <DirectoryTree
@@ -107,6 +122,7 @@ const DirTree = (props: any) => {
       style={props.style}
       onSelect={onSelect}
       height={950}
+      onExpand={onExpand}
     />
   );
 };

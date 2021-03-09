@@ -57,7 +57,7 @@ axios.interceptors.request.use(
     config.data = JSON.stringify(config.data);
 
     config.headers = {
-      "Content-Type": "multipart/from-data",
+      "Content-Type": "application/json",
       // Authorization: `Bearer ${getAccessToken()}`,
     };
     return config;

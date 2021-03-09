@@ -14,6 +14,8 @@ class MyTerminal extends React.Component {
     this.runRealTerminal = this.runRealTerminal.bind(this);
     this.closeRealTerminal = this.closeRealTerminal.bind(this);
     this.ConnectToServer = this.ConnectToServer.bind(this);
+    this.token = props.token;
+    console.log(this.token);
   }
   runRealTerminal(res) {
     this.closed = false;
@@ -26,7 +28,7 @@ class MyTerminal extends React.Component {
     this.term.writeln("");
   }
   ConnectToServer(host) {
-    this.remoteHost = `ws://${host}/echo/` + this.container_id;
+    this.remoteHost = `ws://${host}/echo/${this.container_id}?token=${this.token}`;
     this.terminalSocket = new WebSocket(this.remoteHost);
     this.terminalSocket.onopen = this.runRealTerminal;
     this.terminalSocket.onclose = this.closeRealTerminal;
@@ -39,7 +41,7 @@ class MyTerminal extends React.Component {
   componentDidMount() {
     let terminalContainer = document.getElementById("terminal");
     this.term = new Terminal({
-        rows: 15
+      // rows: 15,
     });
     // this.term = new Terminal({
     //     cursorBlink: true
