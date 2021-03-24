@@ -1,43 +1,30 @@
-import { Form, Input, Button, Checkbox } from "antd";
+import { Form, Input, Button, Checkbox, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./login.css";
-import axios from "../axios/axiosSetting";
-import { getTokens, setTokens } from "../cache/cache";
-const Login = () => {
-  const onFinish = (values: any) => {
+import { login } from "../api/login";
+import { withRouter } from "react-router";
+import { useEffect } from "react";
+import { isLogin } from "../auth/login";
+const Login = (props: any) => {
+  useEffect(() => {
+    if (isLogin()) {
+      props.history.push("/app");
+    }
+  }, []);
+  const onFinish = async (values: any) => {
     console.log("Received values of form: ", values);
-    axios
-      .post("/api/user/login", {
-        username: values.username,
-        password: values.password,
-      })
-      .then((res) => {
-        if (!res) {
-          console.log("服务器错误");
-          return;
-        }
-        
-        if (res.data.status_code !== 0) {
-          console.log("用户名或密码错误");
-          return;
-        }
-        console.log(res);
 
-        setTokens(
-          res.data.data.access_token,
-          res.data.data.access_exp,
-          res.data.data.refresh_token,
-          res.data.data.refresh_exp
-        );
+    const res = await login({
+      username: values.username,
+      password: values.password,
+    });
 
-        console.log(
-          `exp after ${
-            (res.data.data.access_exp -
-              Date.parse(new Date().toString()) / 1000) /
-            60
-          } minutes`
-        );
-      });
+    if (!res.result) {
+      message.error(res.message);
+      return;
+    }
+    message.success("登录成功");
+    props.history.push("/prof");
   };
 
   return (
@@ -91,4 +78,4 @@ const Login = () => {
     </div>
   );
 };
-export default Login;
+export default withRouter(Login);

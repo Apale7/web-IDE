@@ -41,7 +41,6 @@ function CommunityEdition() {
           className = 'ButtonStyle'
         />
         <LoginButton></LoginButton>
-        <LoginButton></LoginButton>
       </div>
 
       <Monaco language={languages[language]} setCode={setCode} code={code} />
