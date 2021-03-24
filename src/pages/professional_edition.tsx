@@ -115,7 +115,7 @@ function ProfessionalEdition() {
               style={{ height: "100%" }}
               container_id={container_id}
               host={host}
-              token={"this is a fake token"}
+              token={"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVc2VySUQiOjEsIkV4dHJhIjp7IklEIjoxLCJDcmVhdGVkQXQiOiIyMDIxLTAyLTI3VDIxOjI5OjA5KzA4OjAwIiwiVXBkYXRlZEF0IjoiMjAyMS0wMi0yN1QyMToyOTowOSswODowMCIsIkRlbGV0ZWRBdCI6bnVsbCwiVXNlcklEIjoxLCJOaWNrbmFtZSI6IkFwYWxlIiwiUGhvbmVOdW1iZXIiOiIxMjM0NTY3ODkwIiwiRW1haWwiOiIiLCJBdmF0YXJVUkwiOiIifSwiZXhwIjoxNjE1OTE5Nzc1LCJpc3MiOiJ1c2VyX2NlbnRlciJ9.YUu-zCdAiEL-uh-bZ7f5qY_7e1iBcsJfpLugSVoHWWs"}
             ></MyTerminal>
           </div>
         </div>
